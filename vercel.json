@@ -1,11 +1,8 @@
 {
   "builds": [
     {
-      "src": "cyclebay/wsgi.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "15mb"
-      }
+      "src": "vercel_app.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
@@ -15,7 +12,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "cyclebay/wsgi.py"
+      "dest": "vercel_app.py"
     }
   ],
   "installCommand": "pip install --upgrade pip && pip install psycopg2-binary==2.9.9 && pip install -r requirements.txt"

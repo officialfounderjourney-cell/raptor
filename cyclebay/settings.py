@@ -49,7 +49,7 @@ INTERNAL_IPS = os.getenv("INTERNAL_IPS", [])
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "cyclebay-bc1e75ddbf8e.herokuapp.com",
+    "https://raptor-9gfs.vercel.app/",
 ]
 
 # Clickjacking protection. Means that you can
