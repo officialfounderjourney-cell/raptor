@@ -47,9 +47,8 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 INTERNAL_IPS = os.getenv("INTERNAL_IPS", [])
 
-ALLOWED_HOSTS = [
-    if ON_VERCEL:
-    ALLOWED_HOSTS = ['*']  # O tu dominio específico
+if ON_VERCEL:
+    ALLOWED_HOSTS = ['*']
 else:
     ALLOWED_HOSTS = [
         "127.0.0.1",
@@ -87,7 +86,7 @@ INSTALLED_APPS = [
     # Other apps
     "crispy_forms",
     "crispy_bootstrap4",
-    "storages",
+
 ]
 
 MIDDLEWARE = [
@@ -200,41 +199,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-if not DEVELOPMENT:
-    # aws settings
-    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
-    AWS_S3_REGION_NAME = 'eu-west-1'  # Ireland
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-    AWS_S3_OBJECT_PARAMETERS = {
-        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
-        'CacheControl': 'max-age=94608000',
-    }
+MEDIAFILES_LOCATION = 'media'
 
-    # s3 static settings
-    STATICFILES_LOCATION = 'static'
-    # URL path for your static files where they will be served from
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
-    STATICFILES_STORAGE = 'cyclebay.custom_storages.StaticStorage'
-
-    # s3 media settings
-    MEDIAFILES_LOCATION = 'media'
-    # URL path for media files where they will be served from
-    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
-    DEFAULT_FILE_STORAGE = 'cyclebay.custom_storages.MediaStorage'
-else:
-    # URL path for your static files where they
-    # will be served from during development
+if DEVELOPMENT:
     STATIC_URL = '/static/'
-    # Dir where static files will be collected using
-    # python manage.py collectstatic
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-    # URL path for media files where they will be served from
     MEDIA_URL = '/media/'
-    # Dir where media files are stored during development
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+else:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
+    MEDIA_URL = '/media/'
+    DEFAULT_FILE_STORAGE = 'cyclebay.custom_storages.VercelBlobMediaStorage'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
