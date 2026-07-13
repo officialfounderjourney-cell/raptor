@@ -16,7 +16,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
-
+# Detectar automáticamente si estamos en Vercel
+ON_VERCEL = os.getenv('VERCEL', 'False') == 'True'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -47,10 +48,14 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 INTERNAL_IPS = os.getenv("INTERNAL_IPS", [])
 
 ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-    "https://raptor-9gfs.vercel.app/",
-]
+    if ON_VERCEL:
+    ALLOWED_HOSTS = ['*']  # O tu dominio específico
+else:
+    ALLOWED_HOSTS = [
+        "127.0.0.1",
+        "localhost",
+        "raptor-9gfs.vercel.app",
+    ]
 
 # Clickjacking protection. Means that you can
 # only embed your site in an iframe on your own domain.
